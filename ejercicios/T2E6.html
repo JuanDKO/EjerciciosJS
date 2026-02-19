@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<h2>Cargamos un fichero XML</h2>
+<button onclick="cargarFicheroFetch('catalogo.xml')">Cargar fichero</button>
+
+<p id="demo"></p>
+ 
+<script>
+    async function cargarFicheroFetch(archivo) {
+        fetch(archivo).then(response => response.text()) //Convierto la respuesta a texto plano
+        .then(data => {
+            //Lo parseamos como XML
+            const parseador = new DOMParser();
+            const fileParseado = parseador.parseFromString(data, "application/xml");
+
+            //Accedemos a todos los CDs del xml
+            const cds = fileParseado.querySelectorAll("CD");
+
+            
+            let texto = "";
+            cds.forEach(cd => {
+                const anho = parseInt(cd.querySelector("YEAR").textContent);
+
+                if(anho >= 1990) {
+                    const titulo = cd.querySelector("TITLE").textContent;
+                    const artista = cd.querySelector("ARTIST").textContent;
+                }
+            })
+            document.getElementById("demo").innerHTML = texto;
+        })
+
+    }
+    
+</script>
+    
+</body>
+</html>

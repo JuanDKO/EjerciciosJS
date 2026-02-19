@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Cargamos un fichero XML</h2>
+<button onclick="cargarFicheroFetch('T1E6.xml')">Cargar fichero</button>
+
+<p id="demo"></p>
+ 
+<script>
+    async function cargarFicheroFetch(archivo) {
+        fetch(archivo).then(response => response.text()) //Convierto la respuesta a texto plano
+        .then(data => {
+            //Lo parseamos como XML
+            const parseador = new DOMParser();
+            const fileParseado = parseador.parseFromString(data, "application/xml");
+
+            //Accedemos a todos los ARTIST del xml
+            const artistas = fileParseado.querySelectorAll("ARTIST");
+            let texto = "";
+            artistas.forEach(artista => {
+                texto = texto + "Artista:" + artista.textContent + "<br>";
+            })
+            document.getElementById("demo").innerHTML = texto;
+        })
+
+    }
+    
+</script>
+
+</body>
+</html>
