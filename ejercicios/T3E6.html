@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body onload="cargarInfoLocal()">
+<h2>Cargamos un fichero XML</h2>
+<button onclick="cargarFicheroFetch('catalogo.xml')">Cargar fichero</button>
+<button onclick="borrarLocal()">Borrar datos locales</button>
+<table id="tabla">
+
+</table>
+    
+ 
+<script>
+    let ListaCds = [];
+
+    async function cargarFicheroFetch(archivo) {
+        document.getElementById("tabla").innerHTML = "";
+        ListaCds = [];
+
+
+        fetch(archivo).then(response => response.text()) //Convierto la respuesta a texto plano
+        .then(data => {
+            //Lo parseamos como XML
+            const parseador = new DOMParser();
+            const fileParseado = parseador.parseFromString(data, "application/xml");
+
+            //Accedemos a todos los CDs del xml
+            const cds = fileParseado.querySelectorAll("CD");
+        
+            const tabla = document.getElementById("tabla");
+
+            let texto = "";
+            cds.forEach((cd, index) => {
+                const anho = parseInt(cd.querySelector("YEAR").textContent);
+
+                if(anho >= 1990) {
+                    const titulo = cd.querySelector("TITLE").textContent;
+                    const artista = cd.querySelector("ARTIST").textContent;
+
+                    let info = { id: index, titulo: titulo, artista: artista, anho: anho};
+                    ListaCds.push(info);
+
+                    guardarLocal();
+
+                    let fila = document.createElement("tr");
+
+                    let datos = document.createElement("td");
+                     datos.textContent = texto + "Titulo: " + titulo + " | Artista: " + artista + " | Año: " + anho;
+                    
+                    let accion = document.createElement("td");
+                    let deleteButton = document.createElement("button");
+                    deleteButton.textContent = "Eliminar";
+                    
+                    deleteButton.addEventListener("click", () => {
+                        fila.remove();
+                        ListaCds = ListaCds.filter(item => item.id !== info.id);
+                        guardarLocal();
+                    })
+                    accion.appendChild(deleteButton);
+                    fila.appendChild(datos);
+                    fila.appendChild(accion);
+
+                    tabla.appendChild(fila);
+
+                }
+            })
+            
+        })
+
+    }
+
+    function guardarLocal() {
+        localStorage.setItem("Cds_guardados", JSON.stringify(ListaCds));
+        console.log("LocalStorage actualizado: ", ListaCds);
+    }
+    function borrarLocal() {
+        localStorage.clear;
+        ListaCds = [];
+        console.log("localStorage actualizado: ", ListaCds);
+    }
+
+    function crearFila(info) {
+        const tabla = document.getElementById("tabla");
+        let fila = document.createElement("tr");
+
+        let datos = document.createElement("td");
+        datos.textContent = `Titulo: ${info.titulo} | Artista: ${info.artista} | Año: ${info.anho}`;
+        
+        let accion = document.createElement("td");
+        let deleteButton = document.createElement("button");
+        deleteButton.textContent = "Eliminar";
+        
+        deleteButton.addEventListener("click", () => {
+            fila.remove();
+            ListaCds = ListaCds.filter(item => item.id !== info.id);
+            guardarLocal();
+        });
+
+        accion.appendChild(deleteButton);
+        fila.appendChild(datos);
+        fila.appendChild(accion);
+        tabla.appendChild(fila);
+    }
+
+    function cargarInfoLocal ()
+    {
+        ListaCds = localStorage.getItem("Cds_guardados");
+        
+        if(ListaCds) {
+            ListaCds = JSON.parse(ListaCds);
+            ListaCds.forEach(info => {
+                crearFila(info);
+            })
+        }
+
+        
+    }    
+</script>
+</body>
+</html>

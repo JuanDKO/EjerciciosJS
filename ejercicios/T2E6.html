@@ -8,8 +8,7 @@
 <body>
 <h2>Cargamos un fichero XML</h2>
 <button onclick="cargarFicheroFetch('catalogo.xml')">Cargar fichero</button>
-
-<p id="demo"></p>
+<p id = "demo"></p>
  
 <script>
     async function cargarFicheroFetch(archivo) {
@@ -21,7 +20,7 @@
 
             //Accedemos a todos los CDs del xml
             const cds = fileParseado.querySelectorAll("CD");
-
+        
             
             let texto = "";
             cds.forEach(cd => {
@@ -30,6 +29,7 @@
                 if(anho >= 1990) {
                     const titulo = cd.querySelector("TITLE").textContent;
                     const artista = cd.querySelector("ARTIST").textContent;
+                     texto = texto + "Titulo: " + titulo + " | Artista: " + artista + " | Año: " + anho + "<br>"
                 }
             })
             document.getElementById("demo").innerHTML = texto;
