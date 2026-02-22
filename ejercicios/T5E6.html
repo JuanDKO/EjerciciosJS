@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h2>Superhéroes con 3 o menos poderes</h2>
+    <button onclick="cargarSuperheroes()">Cargar Superhéroes</button>
+
+    <p id="demo"></p>
+
+    <script>
+        function cargarSuperheroes() {
+            fetch('supers.json')
+                .then(respuesta => respuesta.json())
+                .then(datos => {
+                    let texto = "";
+                    let heroes = datos.members;
+                    //Bucle forEach para recorrer los heroes
+                    heroes.forEach(heroe => {
+                        //Condicion para que muestre losheroes con 3 o menos poderes
+                        if (heroe.powers.length <= 3) {
+                            texto += "Nombre: " + heroe.name + "<br>" +
+                                //join para que muestre los poderes separados por comas(no conocia ese metodo)
+                                "Poderes: " + heroe.powers.join(", ") + "<br><br>";
+                        }
+                    });
+
+                    document.getElementById("demo").innerHTML = texto;
+                });
+        }
+    </script>
+
+</body>
+
+</html>

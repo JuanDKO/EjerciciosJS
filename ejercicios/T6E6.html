@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        /* Estilos para los temas */
+        .claro {
+            background-color: white;
+            color: black;
+        }
+
+        .oscuro {
+            background-color: #333333;
+            color: white;
+        }
+
+        .azul {
+            background-color: #add8e6;
+            color: #00008b;
+        }
+    </style>
+</head>
+
+<body id="cuerpo" class="claro">
+
+    <h2>Selector de Temas</h2>
+    <p>Selecciona un tema para la página. El estilo elegido se guardará y se mantendrá al recargar.</p>
+
+    <button onclick="cambiarTema('claro')">Tema Claro</button>
+    <button onclick="cambiarTema('oscuro')">Tema Oscuro</button>
+    <button onclick="cambiarTema('azul')">Tema Azul</button>
+
+    <script>
+        // Leemos el tema de localStorage, si no hay ninguno ponemos 'claro' por defecto
+        let temaGuardado = localStorage.getItem("tema") || "claro";
+
+        // Aplicamos el tema al cargar la página
+        document.getElementById("cuerpo").className = temaGuardado;
+
+        function cambiarTema(tema) {
+            // Cambiamos la clase del body para que aplique el nuevo estilo
+            document.getElementById("cuerpo").className = tema;
+            // Guardamos el nuevo estilo en localStorage
+            localStorage.setItem("tema", tema);
+        }
+    </script>
+
+</body>
+
+</html>
